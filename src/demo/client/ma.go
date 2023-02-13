@@ -33,9 +33,16 @@ func Ma() {
 
 }
 
+func test() {
+	for {
+		time.Sleep(time.Second)
+	}
+}
+
 func heartbeat(conn net.Conn, interval time.Duration) {
 
 	for {
+		fmt.Println("aaaaaaaaaaaaaaaaaa")
 		time.Sleep(interval)
 		writer := bufio.NewWriter(conn)
 		//创建心跳
@@ -74,7 +81,11 @@ func connectNew() {
 	fmt.Fprintln(dataOutputStream, "360")
 
 	dataOutputStream.Flush()
-
+	go heartbeat(socket, time.Second)
+	fmt.Println("abc========================")
+	//for {
+	//	time.Sleep(time.Second)
+	//}
 }
 
 func maConnetNew() {
