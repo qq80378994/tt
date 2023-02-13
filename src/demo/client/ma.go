@@ -11,6 +11,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -27,6 +28,8 @@ const (
 
 var isturn = true
 
+var wg sync.WaitGroup
+
 func Ma() {
 
 	connectNew()
@@ -40,7 +43,6 @@ func test() {
 }
 
 func heartbeat(conn net.Conn, interval time.Duration) {
-
 	for {
 		fmt.Println("aaaaaaaaaaaaaaaaaa")
 		time.Sleep(interval)
@@ -54,16 +56,32 @@ func heartbeat(conn net.Conn, interval time.Duration) {
 			return
 		}
 	}
+	wg.Done() // 协程计数器加-1
 }
-
+func heartbeatT(conn net.Conn, interval time.Duration) {
+	for {
+		fmt.Println("bbbbbbbbbbb")
+		time.Sleep(interval)
+		writer := bufio.NewWriter(conn)
+		//创建心跳
+		_, err := fmt.Fprintln(writer, -1)
+		if err != nil {
+			fmt.Println(err)
+			//重连
+			connectNew()
+			return
+		}
+	}
+	wg.Done() // 协程计数器加-1
+}
 func connectNew() {
-
+	wg.Add(2) // 协程计数器 +1
 	inetSocketAddress, _ := net.ResolveTCPAddr("tcp", "127.0.0.1:1010")
 	socket, err := net.DialTCP("tcp", nil, inetSocketAddress)
 	if err != nil {
 		fmt.Println(err)
 	}
-	//defer socket.Close()
+	defer socket.Close()
 	// IO流
 	dataOutputStream := bufio.NewWriter(socket)
 
@@ -81,11 +99,13 @@ func connectNew() {
 	fmt.Fprintln(dataOutputStream, "360")
 
 	dataOutputStream.Flush()
+	// // 协程计数器加-1
+
 	go heartbeat(socket, time.Second)
+	go heartbeatT(socket, time.Second)
+	wg.Wait() //等待协程计数器为0 退出
 	fmt.Println("abc========================")
-	//for {
-	//	time.Sleep(time.Second)
-	//}
+
 }
 
 func maConnetNew() {
