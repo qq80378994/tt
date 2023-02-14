@@ -180,6 +180,7 @@ func maConnetNew() {
 		switch cmdParameter[0] {
 		case "back":
 			socket.Close()
+
 			maConnetNew()
 		case "exit":
 			socket.Close()
