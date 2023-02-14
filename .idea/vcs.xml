@@ -3,6 +3,15 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/delve" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/go-vgo/robotgo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/kbinani/screenshot" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/lxn/win" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/shirou/gopsutil" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/vcaesar/gops" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/vcaesar/imgo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/vcaesar/keycode" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/vcaesar/tt" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/yusufpapurcu/wmi" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/gopkg.in/Knetic/govaluate.v3" vcs="Git" />
   </component>
 </project>

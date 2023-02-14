@@ -22,7 +22,7 @@ func main() {
 	//		HSplitter{
 	//			Children: []Widget{
 	//				TextEdit{AssignTo: &inTE},
-	//				TextEdit{AssignTo: &outTE, ReadOnly: true},
+	//go get -u golang.org/x/image/				TextEdit{AssignTo: &outTE, ReadOnly: true},
 	//			},
 	//		},
 	//		PushButton{
