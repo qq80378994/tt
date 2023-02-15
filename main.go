@@ -1,9 +1,6 @@
 package main
 
-import (
-	"demo/client"
-	//. "github.com/lxn/walk/declarative"
-)
+import "tt/src/demo/client"
 
 const (
 	IP   = "192.168.1.209:53"

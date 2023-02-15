@@ -3,7 +3,6 @@ package client
 import (
 	"bufio"
 	"bytes"
-	"demo/util"
 	"encoding/base64"
 	"fmt"
 	"github.com/go-vgo/robotgo"
@@ -16,6 +15,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"tt/src/demo/util"
 )
 
 const (
